@@ -1,1 +1,1 @@
-from job_posting_object import ScrapedObject
+from job_posting_record import JobPostingRecord

@@ -1,9 +1,9 @@
-import sys
-sys.path.append('c:\\Users\\wkdtj\\Desktop\\JobPostingSearch\\air\\modules\\metadata')
 import requests
 import time
 import random
-from job_posting import ScrapedObject
+import sys
+sys.path.append('C:\\Users\\wkdtj\\Desktop\\JobPostingSearch\\airflow\\modules\\job_posting')
+from job_posting import JobPostingRecord
 from bs4 import BeautifulSoup as bs
 
 def kakao_job_posting_scraping():
@@ -33,7 +33,7 @@ def kakao_job_posting_scraping():
             contents_css_selector = '#mArticle > div > div > div.cont_board.board_detail > div'
 
             # 공고 내용 스크래핑 후 데이터 객체, 리스트에 append
-            posting = ScrapedObject(url, company, title, contents_css_selector)
+            posting = JobPostingRecord(url, company, title, contents_css_selector)
             postings.append(posting)
             
         try: # 페이지 스크래핑
@@ -44,9 +44,10 @@ def kakao_job_posting_scraping():
         except IndexError:  # 다음 URL이 없을 경우 스크래핑 중지
             break
 
-        time.sleep(random.uniform(2, 4))
+        print('progress...')
+        time.sleep(random.uniform(1, 2))
     
-    print(len(postings))
-    
-if __name__ == '__main__':
+    return postings
+
+if __name__ == "__main__":
     kakao_job_posting_scraping()

@@ -1,9 +1,8 @@
-import json
 import requests
 from datetime import datetime
 from bs4 import BeautifulSoup as bs
 
-class ScrapedObject:
+class JobPostingRecord:
     url: str                # 해당 url
     company: str            # 회사
     title: str              # 제목
@@ -28,9 +27,10 @@ class ScrapedObject:
                     if txt != '\n'] # doc의 각 태그들에서 전처리 한 텍스트들의 리스트
 
         contents = '\n'.join(articles) # '\n'으로 하나의 문자열로 생성
-        self.contents = contents
+        
+        return contents
     
-    def get_json_posting_contents(self):
+    def get_dict_posting(self):
         dict_data = {
             'url': self.url,
             'company': self.company,
@@ -39,6 +39,4 @@ class ScrapedObject:
             'scraped_time': self.scraped_time
         }
 
-        json_string = json.dumps(dict_data, ensure_ascii=False)
-
-        return json_string
+        return dict_data
