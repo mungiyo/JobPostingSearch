@@ -1,1 +1,1 @@
-from job_posting_record import JobPostingRecord
+from kakao_job_posting_scraper import kakao_job_posting_scraping

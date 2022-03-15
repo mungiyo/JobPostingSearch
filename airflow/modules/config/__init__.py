@@ -1,0 +1,1 @@
+from scraper_config import JobPostingRecord, Config
