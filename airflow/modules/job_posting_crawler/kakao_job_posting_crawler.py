@@ -1,14 +1,15 @@
 import requests
 import time
 import random
-from config import JobPostingRecord, Config
+from config import Config
+from job_posting_record import JobPostingRecord
 from bs4 import BeautifulSoup as bs
 
-def kakao_job_posting_scraping():
+def kakao_job_posting_crawling():
     job_postings = []
     next_page_url = Config.JOB_POSTINGS['kakao']['url']
     posting_css_selector = Config.JOB_POSTINGS['kakao']['posting_css_selector ']
-    contents_css_selector = Config.JOB_POSTINGS['kakao']['contents_css_selector']
+    posting_contents_css_selector = Config.JOB_POSTINGS['kakao']['contents_css_selector']
     page_css_selector = Config.JOB_POSTINGS['kakao']['page_css_selector']
 
     while True:
@@ -23,8 +24,8 @@ def kakao_job_posting_scraping():
             title = element.div.div.a.h4.text
 
             # 공고 내용 스크래핑 후 데이터 객체, 리스트에 append
-            posting = JobPostingRecord(url, company, title, contents_css_selector)
-            job_postings.append(posting.get_dict_posting())
+            posting = JobPostingRecord(url, company, title, posting_contents_css_selector)
+            job_postings.append(posting)
 
             time.sleep(random.uniform(1, 2))
             

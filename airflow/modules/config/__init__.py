@@ -1,1 +1,1 @@
-from scraper_config import JobPostingRecord, Config
+from scraper_config import Config

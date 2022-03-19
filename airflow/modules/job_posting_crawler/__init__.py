@@ -1,0 +1,1 @@
+from kakao_job_posting_crawler import kakao_job_posting_crawling
