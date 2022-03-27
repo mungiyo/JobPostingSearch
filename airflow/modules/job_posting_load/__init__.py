@@ -1,0 +1,1 @@
+from job_posting_load.mongo_load import mongo_load

@@ -1,1 +1,1 @@
-from job_posting_record import JobPostingRecord
+from job_posting_record.job_posting_record import JobPostingRecord

@@ -1,0 +1,1 @@
+from job_posting_transform.text_transform import text_transform

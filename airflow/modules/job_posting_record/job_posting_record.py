@@ -3,11 +3,11 @@ from datetime import datetime
 from bs4 import BeautifulSoup as bs
 
 class JobPostingRecord:
-    url: str                # 해당 url
-    company: str            # 회사
-    title: str              # 제목
-    contents: str           # 내용
-    crawled_time: datetime  # 스크랩된 시간
+    url: str
+    company: str
+    title: str
+    contents: str
+    crawled_time: datetime
 
     def __init__(self, url, company, title, contents_css_selector):
         self.url = url
@@ -16,18 +16,13 @@ class JobPostingRecord:
         self.contents = self.set_posting_contents(contents_css_selector)
         self.crawled_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    def set_posting_contents(self, posting_contents_css_seletor):  # 채용 공고의 내용 스크래핑 함수
+    def set_posting_contents(self, posting_contents_css_seletor):  # job posting contents scraping func.
         page = requests.get(self.url)
         soup = bs(page.text, 'html.parser')
         element = soup.select(posting_contents_css_seletor)
-        tagged_txt_list = element[0].children   # HTML 문서의 태그들의 리스트        
-        articles = [txt.get_text(' ') for txt in tagged_txt_list] # doc의 각 태그들에서 텍스트들의 리스트
-
-        # articles = [txt.get_text('|').replace('  ', '').replace('\n', '')
-        #             for txt in tagged_txt_list
-        #             if txt != '\n'] # doc의 각 태그들에서 전처리 한 텍스트들의 리스트
-
-        contents = '\n'.join(articles) # '\n'으로 하나의 문자열로 생성
+        tagged_txt_list = element[0].children   # tag list of HTML document       
+        articles = [txt.get_text(' ') for txt in tagged_txt_list] # text list of tagged_text
+        contents = ' '.join(articles) # ' ' joined string
         
         return contents
     
