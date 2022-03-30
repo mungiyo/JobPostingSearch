@@ -1,7 +1,98 @@
-# 파일 규격 버전
 version: "3"
-# 이 항목 밑에 실행하려는 컨테이너 들을 정의
+
 services: 
+  elasticsearch:
+    restart: always
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.14
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - ES_JAVA_OPTS=-Xms2048m -Xmx2048m
+      - discovery.type=single-node
+    healthcheck:
+      test: "wget -q -O - http://localhost:9200/_cat/health"
+      interval: 1s
+      timeout: 30s
+      retries: 300
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    networks:
+      - monstache-network
+
+  monstache:
+    restart: always
+    image: rwynn/monstache:rel5
+    command: -f /monstache.config.toml &
+    volumes:
+      - ./monstache/monstache.config.toml:/monstache.config.toml
+    depends_on:
+      - elasticsearch
+      - mongo1
+      - mongo2
+      - mongo3
+    links:
+      - elasticsearch
+    ports:
+      - "8080:8080"
+    networks:
+      - monstache-network
+
+  mongo1:
+    image: "mongo"
+    ports:
+      - "27020:27017"
+    volumes:
+      - mongo1:/data/db
+    networks:
+      - monstache-network
+    command: mongod --replSet replication
+
+  mongo2:
+    image: "mongo"
+    ports:
+      - "27021:27017"
+    volumes:
+      - mongo2:/data/db
+    networks:
+      - monstache-network
+    command: mongod --replSet replication
+    depends_on:
+      - mongo1
+
+  mongo3:
+    image: "mongo"
+    ports:
+      - "27022:27017"
+    volumes:
+      - mongo3:/data/db
+    networks:
+      - monstache-network
+    command: mongod --replSet replication
+    depends_on:
+      - mongo2
+
+  mongosetup:
+    build: 
+      context: ./mongodb
+    depends_on:
+      - mongo1
+    networks:
+      - monstache-network
+
+volumes:
+  mongo1:
+  mongo2:
+  mongo3:
+
+networks:
+  monstache-network:
+    driver: bridge
+
   # postgres:
   #   container_name: postgres
   #   image: postgres:9.6
@@ -36,37 +127,17 @@ services:
   #   depends_on:
   #       - postgres
 
-  # 서비스 명
-  mongodb:
-    # 사용할 이미지
-    image: mongo
-    # 컨테이너 실행 시 재시작
-    restart: always
-    # 컨테이너 이름 설정
-    container_name: mongodb
-    # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)
-    ports:
-      - "27017:27017"
-    # -e 옵션
-    environment: 
-      # MongoDB 계정 및 패스워드 설정 옵션
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-    volumes:
-      # -v 옵션 (다렉토리 마운트 설정)
-      - /data/mongodb/data/db:/data/db
-
-  mongodb-express:
-    image: mongo-express
-    restart: always
-    container_name: mongodb-express
-    ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongodb
-      # mongodb-express의 username, password
-      ME_CONFIG_BASICAUTH_USERNAME: root
-      ME_CONFIG_BASICAUTH_PASSWORD: password
-      # mongodb의 username, password
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+  # mongodb-express:
+  #   image: mongo-express
+  #   restart: always
+  #   container_name: mongodb-express
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     ME_CONFIG_MONGODB_SERVER: mongodb
+  #     # mongodb-express의 username, password
+  #     ME_CONFIG_BASICAUTH_USERNAME: root
+  #     ME_CONFIG_BASICAUTH_PASSWORD: password
+  #     # mongodb의 username, password
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: password
