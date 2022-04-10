@@ -1,109 +1,31 @@
 version: "3"
 
 services: 
-  elasticsearch:
-    restart: always
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.14
+  postgres:
+    container_name: postgres
+    image: postgres:13
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "5432:5432"
     environment:
-      - ES_JAVA_OPTS=-Xms2048m -Xmx2048m
-      - discovery.type=single-node
-    healthcheck:
-      test: "wget -q -O - http://localhost:9200/_cat/health"
-      interval: 1s
-      timeout: 30s
-      retries: 300
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - ./elasticsearch/data:/usr/share/elasticsearch/data
-    networks:
-      - monstache-network
+        - POSTGRES_USER=${AIRFLOW}
+        - POSTGRES_PASSWORD=${AIRFLOW}
+        - POSTGRES_DB=${AIRFLOW}
+    logging:
+        options:
+            max-size: 10m
+            max-file: "3"  
 
-  monstache:
-    restart: always
-    image: rwynn/monstache:rel5
-    command: -f /monstache.config.toml &
-    volumes:
-      - ./monstache/monstache.config.toml:/monstache.config.toml
-    depends_on:
-      - elasticsearch
-      - mongo1
-      - mongo2
-      - mongo3
-    links:
-      - elasticsearch
-    ports:
-      - "8080:8080"
-    networks:
-      - monstache-network
-
-  mongo1:
+  mongo:
+    container_name: mongo1
     image: "mongo"
     ports:
-      - "27020:27017"
+      - "27017:27017"
     volumes:
-      - mongo1:/data/db
-    networks:
-      - monstache-network
-    command: mongod --replSet replication
-
-  mongo2:
-    image: "mongo"
-    ports:
-      - "27021:27017"
-    volumes:
-      - mongo2:/data/db
-    networks:
-      - monstache-network
-    command: mongod --replSet replication
-    depends_on:
-      - mongo1
-
-  mongo3:
-    image: "mongo"
-    ports:
-      - "27022:27017"
-    volumes:
-      - mongo3:/data/db
-    networks:
-      - monstache-network
-    command: mongod --replSet replication
-    depends_on:
-      - mongo2
-
-  mongosetup:
-    build: 
-      context: ./mongodb
-    depends_on:
-      - mongo1
-    networks:
-      - monstache-network
+      - mongo:/data/db
+    command: mongod
 
 volumes:
-  mongo1:
-  mongo2:
-  mongo3:
-
-networks:
-  monstache-network:
-    driver: bridge
-
-  # postgres:
-  #   container_name: postgres
-  #   image: postgres:9.6
-  #   environment:
-  #       - POSTGRES_USER=${AIRFLOW}
-  #       - POSTGRES_PASSWORD=${AIRFLOW}
-  #       - POSTGRES_DB=${AIRFLOW}
-  #   logging:
-  #       options:
-  #           max-size: 10m
-  #           max-file: "3"   
+  mongo:
 
   # airflow:
   #   container_name: airflow
@@ -126,18 +48,3 @@ networks:
   #       retries: 3
   #   depends_on:
   #       - postgres
-
-  # mongodb-express:
-  #   image: mongo-express
-  #   restart: always
-  #   container_name: mongodb-express
-  #   ports:
-  #     - "8081:8081"
-  #   environment:
-  #     ME_CONFIG_MONGODB_SERVER: mongodb
-  #     # mongodb-express의 username, password
-  #     ME_CONFIG_BASICAUTH_USERNAME: root
-  #     ME_CONFIG_BASICAUTH_PASSWORD: password
-  #     # mongodb의 username, password
-  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
-  #     ME_CONFIG_MONGODB_ADMINPASSWORD: password

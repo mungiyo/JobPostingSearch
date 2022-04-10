@@ -7,14 +7,14 @@ class JobPostingRecord:
     company: str
     title: str
     contents: str
-    crawled_time: datetime
+    scraped_time: datetime
 
     def __init__(self, url, company, title, contents_css_selector):
         self.url = url
         self.company = company
         self.title = title
         self.contents = self.set_posting_contents(contents_css_selector)
-        self.crawled_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.scraped_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     def set_posting_contents(self, posting_contents_css_seletor):  # job posting contents scraping func.
         page = requests.get(self.url)
@@ -32,7 +32,7 @@ class JobPostingRecord:
             'company': self.company,
             'title': self.title,
             'contents': self.contents,
-            'crawled_time': self.crawled_time
+            'scraped_time': self.scraped_time
         }
 
         return dict_data

@@ -1,0 +1,2 @@
+from job_posting_scraper.kakao_job_posting_scraping import kakao_job_posting_scraping
+from job_posting_scraper.line_job_posting_scraping import line_job_posting_scraping

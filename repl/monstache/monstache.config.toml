@@ -8,5 +8,5 @@ elasticsearch-max-bytes = 8000000
 dropped-collections = false
 dropped-databases = false
 
-namespace-regex = "^test.test*"
-direct-read-namespaces = ["test"]
+namespace-regex = "^job.postings*"
+direct-read-namespaces = ["postings"]

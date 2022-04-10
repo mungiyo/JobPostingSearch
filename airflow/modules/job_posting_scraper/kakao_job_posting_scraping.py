@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup as bs
 from config import Config
 from job_posting_record import JobPostingRecord
 
-def kakao_job_posting_crawling():
+def kakao_job_posting_scraping():
     job_postings = []
     next_page_url = Config.JOB_POSTINGS['kakao']['url']
     posting_css_selector = Config.JOB_POSTINGS['kakao']['posting_css_selector']
