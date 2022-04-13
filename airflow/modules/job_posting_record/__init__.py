@@ -1,1 +1,0 @@
-from job_posting_record.job_posting_record import JobPostingRecord

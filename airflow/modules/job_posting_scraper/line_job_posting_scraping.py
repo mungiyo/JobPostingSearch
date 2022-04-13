@@ -2,17 +2,16 @@ import requests
 import time
 import random
 from bs4 import BeautifulSoup as bs
-from config import Config
-from job_posting_record import JobPostingRecord
+from config import Config, JobPostingRecord
 
 def line_job_posting_scraping():
     job_postings = []
-    next_page_url = Config.JOB_POSTINGS['line']['url']
+    page_url = Config.JOB_POSTINGS['line']['url']
     posting_css_selector = Config.JOB_POSTINGS['line']['posting_css_selector']
     posting_contents_css_selector = Config.JOB_POSTINGS['line']['posting_contents_css_selector']
 
-    page = requests.get(next_page_url)
-    soup = bs(page.text, 'html.parser')
+    rep = requests.get(page_url)
+    soup = bs(rep.text, 'html.parser')
     posting_elements = soup.select(posting_css_selector)
 
     for element in posting_elements:
@@ -20,6 +19,9 @@ def line_job_posting_scraping():
         url = 'https://careers.linecorp.com' + element.a['href']
         company = 'line'
         title = element.a.h3.text
+        region = element.a.div.span.text
+        
+        if not (region in ("Seoul", "Bundang")): continue
 
         # after contents scarping, append to posting list
         posting = JobPostingRecord(url, company, title, posting_contents_css_selector)

@@ -1,15 +1,17 @@
+# airflow
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from airflow.utils.dates import days_ago
-from datetime import timedelta, datetime
+# modules
 from job_posting_scraper import kakao_job_posting_scraping
 from job_posting_transform import text_transform
 from job_posting_load import mongo_load
+# library
+from datetime import timedelta, datetime
 
 with DAG(
     dag_id='kakao_job_posting_ETL',
     description='kakao job postings scraping DAG',
-    start_date=datetime(2022, 4, 3),
+    start_date=datetime(2022, 4, 12),
     schedule_interval=timedelta(hours=3)
 ) as dag:
     # Task1, job posting scraping
@@ -19,7 +21,7 @@ with DAG(
         provide_context=True,
         owner='mungiyo',
         retries=3,
-        retry_delay=timedelta(minutes=5)
+        retry_delay=timedelta(minutes=1)
     )
 
     # Task2, result of t1 transform
@@ -29,7 +31,7 @@ with DAG(
         provide_context=True,
         owner='mungiyo',
         retries=3,
-        retry_delay=timedelta(minutes=5)
+        retry_delay=timedelta(minutes=1)
     )
 
     # Task3, result of t2 load to mongodb
@@ -40,7 +42,7 @@ with DAG(
         provide_context=True,
         owner='mungiyo',
         retries=3,
-        retry_delay=timedelta(minutes=5)
+        retry_delay=timedelta(minutes=1)
     )
 
     t1 >> t2 >> t3

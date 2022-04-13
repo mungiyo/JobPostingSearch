@@ -15,14 +15,40 @@ services:
             max-size: 10m
             max-file: "3"  
 
+  elasticsearch:
+    container_name: elasticsearch
+    restart: always
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.14
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - discovery.type=single-node
+    healthcheck:
+      test: "wget -q -O - http://localhost:9200/_cat/health"
+      interval: 5s
+      timeout: 30s
+      retries: 300
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+
   mongo:
-    container_name: mongo1
+    container_name: mongo
     image: "mongo"
     ports:
       - "27017:27017"
     volumes:
       - mongo:/data/db
     command: mongod
+  
+  sync_scheduler:
+    container_name: sync_scheduler
+    build: ./scheduler
 
 volumes:
   mongo:
