@@ -7,12 +7,12 @@ class Config:
         'kakao': {
             'url': 'https://careers.kakao.com/jobs',
             'posting_css_selector': '#mArticle > div > ul.list_jobs > li',
-            'posting_contents_css_selector': '#mArticle > div > div > div.cont_board.board_detail > div'
+            'contents_css_selector': '#mArticle > div > div > div.cont_board.board_detail > div'
         },
         'line': {
             'url': 'https://careers.linecorp.com/jobs?ca=Engineering&ci=Seoul,Bundang&co=East%20Asia',
             'posting_css_selector': '#container > div.content_w1200 > div.job_result > ul > li',
-            'posting_contents_css_selector': '#jobs-contents > div'
+            'contents_css_selector': '#jobs-contents > div'
         },
         'naver': {
             'url': 'https://recruit.navercorp.com/naver/job/listJson',
@@ -30,7 +30,7 @@ class Config:
     }
 
     MONGO_HOST = 'localhost'
-    MONGO_PORT = '27017'
+    MONGO_PORT = '27020'
     MONGO_DB = 'job'
     MONGO_URI = f"mongodb://{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}"
 
@@ -46,18 +46,17 @@ class JobPostingRecord:
         self.company = company
         self.title = title
         if contents_css_selector is None:
-            self.contents = contents
+            soup = bs(contents, 'html.parser')
+            self.contents = soup.get_text()
         else: 
             self.contents = self.set_posting_contents(contents_css_selector)
         self.scraped_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     def set_posting_contents(self, posting_contents_css_seletor):  # job posting contents scraping func.
         page = requests.get(self.url)
-        soup = bs(page.text, 'html.parser')
+        soup = bs(page.content.decode('utf-8', 'replace'), 'html.parser')
         element = soup.select(posting_contents_css_seletor)
-        tagged_txt_list = element[0].children   # tag list of HTML document       
-        articles = [txt.get_text(' ') for txt in tagged_txt_list] # text list of tagged_text
-        contents = ' '.join(articles) # ' ' joined string
+        contents = element[0].get_text()
         
         return contents
     

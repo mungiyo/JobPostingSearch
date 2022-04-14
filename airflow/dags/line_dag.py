@@ -11,7 +11,7 @@ from datetime import timedelta, datetime
 with DAG(
     dag_id='line_job_posting_ETL',
     description='line job postings scraping DAG',
-    start_date=datetime(2022, 4, 13),
+    start_date=datetime(2022, 4, 12),
     schedule_interval=timedelta(hours=3)
 ) as dag:
     # Task1, job posting scraping

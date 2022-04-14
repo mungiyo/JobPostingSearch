@@ -10,6 +10,8 @@ services:
         - POSTGRES_USER=${AIRFLOW}
         - POSTGRES_PASSWORD=${AIRFLOW}
         - POSTGRES_DB=${AIRFLOW}
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
     logging:
         options:
             max-size: 10m
@@ -41,7 +43,7 @@ services:
     container_name: mongo
     image: "mongo"
     ports:
-      - "27017:27017"
+      - "27020:27017"
     volumes:
       - mongo:/data/db
     command: mongod

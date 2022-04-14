@@ -8,7 +8,7 @@ def kakao_job_posting_scraping():
     job_postings = []
     next_page_url = Config.JOB_POSTINGS['kakao']['url'] + '?page='
     posting_css_selector = Config.JOB_POSTINGS['kakao']['posting_css_selector']
-    posting_contents_css_selector = Config.JOB_POSTINGS['kakao']['posting_contents_css_selector']
+    contents_css_selector = Config.JOB_POSTINGS['kakao']['contents_css_selector']
     page_num = 1
 
     while True:
@@ -24,7 +24,12 @@ def kakao_job_posting_scraping():
             title = element.div.div.a.h4.text
 
             # after contents scarping, append to posting list
-            posting = JobPostingRecord(url, company, title, posting_contents_css_selector)
+            posting = JobPostingRecord(
+                url=url,
+                company=company,
+                title=title,
+                contents_css_selector=contents_css_selector
+            )
             job_postings.append(posting)
             
             time.sleep(random.uniform(1, 2))    # 1 ~ 2 seconds sleep

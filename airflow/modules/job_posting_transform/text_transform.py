@@ -11,12 +11,10 @@ def text_transform(**context):
     mycol = mydb[job_postings[0]['company']]
     docs = mycol.find()
     url_list = [doc['url'] for doc in docs]
-
     for posting in job_postings:
         if posting['url'] in url_list:
-            for doc in docs:
-                if doc['url'] == posting['url']:
-                    posting['scraped_time'] = doc['scraped_time']
+            i = url_list.index(posting['url'])
+            posting['scraped_time'] = docs[i]['scraped_time']
         tokenized_text = [word[0] for word in okt.pos(posting['contents'])]
         posting['contents'] = ' '.join(tokenized_text)
     

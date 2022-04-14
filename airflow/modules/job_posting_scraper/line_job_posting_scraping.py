@@ -8,7 +8,7 @@ def line_job_posting_scraping():
     job_postings = []
     page_url = Config.JOB_POSTINGS['line']['url']
     posting_css_selector = Config.JOB_POSTINGS['line']['posting_css_selector']
-    posting_contents_css_selector = Config.JOB_POSTINGS['line']['posting_contents_css_selector']
+    contents_css_selector = Config.JOB_POSTINGS['line']['contents_css_selector']
 
     rep = requests.get(page_url)
     soup = bs(rep.text, 'html.parser')
@@ -19,12 +19,23 @@ def line_job_posting_scraping():
         url = 'https://careers.linecorp.com' + element.a['href']
         company = 'line'
         title = element.a.h3.text
-        region = element.a.div.span.text
         
-        if not (region in ("Seoul", "Bundang")): continue
-
+        try:
+            region = element.a.div.find_all('span')[0].text
+            field = element.a.div.find_all('span')[2].text
+        except IndexError:
+            continue
+        
+        if (region in ("Seoul", "Bundang")) and field == 'Engineering': pass
+        else: continue
+        
         # after contents scarping, append to posting list
-        posting = JobPostingRecord(url, company, title, posting_contents_css_selector)
+        posting = JobPostingRecord(
+            url=url,
+            company=company,
+            title=title,
+            contents_css_selector=contents_css_selector
+        )
         job_postings.append(posting)
 
         time.sleep(random.uniform(1, 2))    # 1 ~ 2 seconds sleep
