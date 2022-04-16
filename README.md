@@ -20,7 +20,7 @@
 
 <!-- ARCHITECTURE DIAGRAM -->
 ## Architecture Diagram
-![MVP Architecture](./img/architecture.png)
+![System Architecture](./img/Architecture.png)
 
 
 <!-- HOW IT WORKS -->
