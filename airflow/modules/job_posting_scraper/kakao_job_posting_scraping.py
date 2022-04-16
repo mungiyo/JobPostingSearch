@@ -20,7 +20,7 @@ def kakao_job_posting_scraping():
         for element in posting_elements:
             # scraped data info.
             url = 'https://careers.kakao.com' + element.div.div.a['href']
-            company = 'kakao'
+            company = '카카오'
             title = element.div.div.a.h4.text
 
             # after contents scarping, append to posting list

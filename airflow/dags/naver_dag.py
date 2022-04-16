@@ -12,7 +12,7 @@ with DAG(
     dag_id='naver_job_posting_ETL',
     description='naver job postings scraping DAG',
     start_date=datetime(2022, 4, 12),
-    schedule_interval=timedelta(hours=3)
+    schedule_interval=timedelta(hours=12)
 ) as dag:
     # Task1, job posting scraping
     t1 = PythonOperator(

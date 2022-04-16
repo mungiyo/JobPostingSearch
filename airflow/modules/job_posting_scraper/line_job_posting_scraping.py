@@ -17,7 +17,7 @@ def line_job_posting_scraping():
     for element in posting_elements:
         # scraped data info.
         url = 'https://careers.linecorp.com' + element.a['href']
-        company = 'line'
+        company = '라인'
         title = element.a.h3.text
         
         try:

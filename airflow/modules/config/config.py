@@ -2,38 +2,6 @@ import requests
 from datetime import datetime
 from bs4 import BeautifulSoup as bs
 
-class Config:
-    JOB_POSTINGS = {
-        'kakao': {
-            'url': 'https://careers.kakao.com/jobs',
-            'posting_css_selector': '#mArticle > div > ul.list_jobs > li',
-            'contents_css_selector': '#mArticle > div > div > div.cont_board.board_detail > div'
-        },
-        'line': {
-            'url': 'https://careers.linecorp.com/jobs?ca=Engineering&ci=Seoul,Bundang&co=East%20Asia',
-            'posting_css_selector': '#container > div.content_w1200 > div.job_result > ul > li',
-            'contents_css_selector': '#jobs-contents > div'
-        },
-        'naver': {
-            'url': 'https://recruit.navercorp.com/naver/job/listJson',
-            'method': 'POST',
-            'data': {
-                'classNm': 'developer',
-                'startNum': 1,
-                'endNum': 1000
-            },
-            'headers': {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'Referer': 'https://recruit.navercorp.com/naver/job/list/developer'
-            },
-        }
-    }
-
-    MONGO_HOST = 'localhost'
-    MONGO_PORT = '27020'
-    MONGO_DB = 'job'
-    MONGO_URI = f"mongodb://{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}"
-
 class JobPostingRecord:
     url: str
     company: str
@@ -70,3 +38,35 @@ class JobPostingRecord:
         }
 
         return dict_data
+
+class Config:
+    JOB_POSTINGS = {
+        'kakao': {
+            'url': 'https://careers.kakao.com/jobs',
+            'posting_css_selector': '#mArticle > div > ul.list_jobs > li',
+            'contents_css_selector': '#mArticle > div > div > div.cont_board.board_detail > div'
+        },
+        'line': {
+            'url': 'https://careers.linecorp.com/jobs?ca=Engineering&ci=Seoul,Bundang&co=East%20Asia',
+            'posting_css_selector': '#container > div.content_w1200 > div.job_result > ul > li',
+            'contents_css_selector': '#jobs-contents > div'
+        },
+        'naver': {
+            'url': 'https://recruit.navercorp.com/naver/job/listJson',
+            'method': 'POST',
+            'data': {
+                'classNm': 'developer',
+                'startNum': 1,
+                'endNum': 1000
+            },
+            'headers': {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Referer': 'https://recruit.navercorp.com/naver/job/list/developer'
+            },
+        }
+    }
+
+    MONGO_HOST = 'localhost'
+    MONGO_PORT = '27020'
+    MONGO_DB = 'job'
+    MONGO_URI = f"mongodb://{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}"

@@ -15,7 +15,6 @@ def text_transform(**context):
         if posting['url'] in url_list:
             i = url_list.index(posting['url'])
             posting['scraped_time'] = docs[i]['scraped_time']
-        tokenized_text = [word[0] for word in okt.pos(posting['contents'])]
-        posting['contents'] = ' '.join(tokenized_text)
+        posting['contents'] = posting['contents'].replace('\n', ' ')
     
     return job_postings

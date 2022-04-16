@@ -12,7 +12,7 @@ def naver_job_posting_scraping():
     for data in datas:
         posting = JobPostingRecord(
             url='https://recruit.navercorp.com/naver/job/list/developer/' + str(data['annoId']),
-            company='naver',
+            company='네이버',
             title=data['jobNm'],
             contents=data['jobText']
         )
