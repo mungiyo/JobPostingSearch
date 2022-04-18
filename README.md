@@ -1,5 +1,5 @@
 ﻿# JobPostingSearch
-[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-360/)
+[![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-3910/)
 
 
 **JobPostingSearch**는 IT 채용 공고 데이터를 활용하여 원하는 공고를 빠르게 찾을 수 있도록 통합적으로 검색할 수 있는 웹 사이트를 구현한 프로젝트입니다.
