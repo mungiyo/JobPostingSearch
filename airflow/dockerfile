@@ -1,17 +1,19 @@
-FROM puckel/docker-airflow
+FROM python:3.9.10-buster
 
 WORKDIR /usr/local/airflow
 
 COPY requirements.txt .
 COPY airflow.cfg .
+COPY entrypoint.sh .
 
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 ENV PYTHONPATH "${PYTHONPATH}:/usr/local/airflow/modules"
+ENV AIRFLOW_HOME "/usr/local/airflow"
 
 ENV EXECUTOR "Local"
-ENV AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL "15"
-ENV AIRFLOW__WEBSERVER__WORKER_REFRESH_INTERVAL "450"
-ENV AIRFLOW__WEBSERVER__WEB_SERVER_WORKER_TIMEOUT "150"
+
+CMD [ "./entrypoint.sh" ]
 
 # Add Custom Configuration

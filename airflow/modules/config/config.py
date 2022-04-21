@@ -66,7 +66,7 @@ class Config:
         }
     }
 
-    MONGO_HOST = 'localhost'
-    MONGO_PORT = '27020'
+    MONGO_HOST = 'mongo'
+    MONGO_PORT = '27017'
     MONGO_DB = 'job'
     MONGO_URI = f"mongodb://{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}"

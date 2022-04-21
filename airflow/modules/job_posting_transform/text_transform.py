@@ -1,9 +1,7 @@
-from konlpy.tag import Okt
 from pymongo import MongoClient
 from config import Config
 
 def text_transform(**context):
-    okt = Okt()
     job_postings = context['ti'].xcom_pull(task_ids='job_posting_scraping')
     
     myclient = MongoClient(Config.MONGO_URI)
