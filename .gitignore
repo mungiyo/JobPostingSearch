@@ -127,9 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
+data
 .vscode
 logs
-elasticsearch
-postgres
 webserver_config.py

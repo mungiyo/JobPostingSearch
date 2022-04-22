@@ -2,10 +2,10 @@
 {% block content %}
     <main>
         <div class="container-fluid px-4">
-            <h1 class="mt-4">Tables</h1>
+            <h1 class="mt-4">Job Posting</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Dashboard</a></li>
-                <li class="breadcrumb-item active">Tables</li>
+                <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Main</a></li>
+                <li class="breadcrumb-item active">Job Posting</li>
             </ol>
             <!-- <div class="card mb-4">
                 <div class="card-body">
@@ -17,7 +17,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
-                    DataTable Example
+                    Job Posting
                 </div>
                 <div class="card-body">
                     <table id="datatablesSimple">
@@ -25,14 +25,12 @@
                             <tr>
                                 <th>Company</th>
                                 <th>Title</th>
-                                <th>Scraped time</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
                                 <th>Company</th>
                                 <th>Title</th>
-                                <th>Scraped time</th>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -40,7 +38,6 @@
                             <tr>
                                 <td>{{ source['company'] }}</td>
                                 <td><a target="_blank" href="{{ source['url'] }}">{{ source['title'] }}</a></td>
-                                <td>{{ source['scraped_time'] }}</td>
                                 <td class="hidden-col">{{ source['contents'] }}</td>
                             </tr>
                             {% endfor %}

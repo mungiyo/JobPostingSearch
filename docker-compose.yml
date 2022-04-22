@@ -42,7 +42,7 @@ services:
   elasticsearch:
     container_name: elasticsearch
     restart: always
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.14
+    build: ./elasticsearch
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -60,6 +60,7 @@ services:
         hard: -1
     volumes:
       - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/logs:/usr/share/elasticsearch/logs
 
   mongo:
     container_name: mongo

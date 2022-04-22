@@ -11,8 +11,21 @@ MONGO_URI = f"mongodb://{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}"
 ES_URL = 'elasticsearch:9200'
 ES_INDEX = 'postings'
 ES_DOC_TYPE = 'posting'
+INDEX_SETTINGS = {
+    "settings": {
+        "number_of_shards": 1,
+        "number_of_replicas": 1,
+        "analysis": {
+            "analyzer": {
+            "korean_analyzer": {
+                "tokenizer": "nori_tokenizer"
+                }
+            }
+        }
+    }
+}
 
-@sched.scheduled_job('interval', seconds=30, id='test_01')
+@sched.scheduled_job('interval', minutes=1, id='test_01')
 def mongo2es_sync():
     myclient = MongoClient(MONGO_URI)
     mydb = myclient[MONGO_DB]
@@ -31,6 +44,8 @@ def mongo2es_sync():
     
     if es_client.indices.exists(index=ES_INDEX):
         es_client.indices.delete(index=ES_INDEX)
+
+    es_client.indices.create(index=ES_INDEX, body=INDEX_SETTINGS)
     
     postings_bulk = []
     for posting in postings:
