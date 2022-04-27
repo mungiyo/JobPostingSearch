@@ -1,4 +1,5 @@
 import requests
+from requests_html import HTMLSession
 from datetime import datetime
 from bs4 import BeautifulSoup as bs
 
@@ -6,23 +7,32 @@ class JobPostingRecord:
     url: str
     company: str
     title: str
+    js_need: bool
+    contents_css_selector: str
     contents: str
     scraped_time: datetime
 
-    def __init__(self, url, company, title, contents_css_selector=None, contents=None):
+    def __init__(self, url, company, title, js_need=False, contents_css_selector=None, contents=None):
         self.url = url
         self.company = company
         self.title = title
         if contents_css_selector is None:
             soup = bs(contents, 'html.parser')
             self.contents = soup.get_text()
-        else: 
-            self.contents = self.set_posting_contents(contents_css_selector)
+        else:
+            self.contents = self.set_posting_contents(contents_css_selector, js_need)
         self.scraped_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    def set_posting_contents(self, posting_contents_css_seletor):  # job posting contents scraping func.
-        page = requests.get(self.url)
-        soup = bs(page.content.decode('utf-8', 'replace'), 'html.parser')
+    def set_posting_contents(self, posting_contents_css_seletor, js_need):  # job posting contents scraping func.
+        if js_need:
+            session = HTMLSession()
+            r = session.get(self.url)
+            r.html.render()
+            soup = bs(r.html.html, "lxml")
+        else:
+            page = requests.get(self.url)
+            soup = bs(page.content.decode('utf-8', 'replace'), 'html.parser')
+            
         element = soup.select(posting_contents_css_seletor)
         contents = element[0].get_text()
         

@@ -35,7 +35,6 @@ def kakao_job_posting_scraping():
             time.sleep(random.uniform(1, 2))    # 1 ~ 2 seconds sleep
             
         page_num += 1
-        time.sleep(random.uniform(1, 2))    # 1 ~ 2 seconds sleep
     
     serialized_data = [posting.get_dict_posting() for posting in job_postings]
 

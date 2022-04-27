@@ -1,4 +1,6 @@
 import requests
+import time
+import random
 from config import Config, JobPostingRecord
 
 def naver_job_posting_scraping():
@@ -17,6 +19,7 @@ def naver_job_posting_scraping():
             contents=data['jobText']
         )
         job_postings.append(posting)
+        time.sleep(random.uniform(1, 2))
     
     serialized_data = [posting.get_dict_posting() for posting in job_postings]
     
