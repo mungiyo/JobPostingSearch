@@ -73,9 +73,14 @@
 
 <!-- API -->
 ## API service
-- 모든 채용 공고 확인
+- 모든 채용 공고
 ```
-http://127.0.0.1:5000
+[GET] http://127.0.0.1:5000/postings
+```
+
+- 채용 공고 검색
+```
+[GET] http://127.0.0.1:5000/postings?search=keyword
 ```
 
 <!-- REFERENCES -->
