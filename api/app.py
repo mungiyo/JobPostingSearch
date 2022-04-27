@@ -11,7 +11,7 @@ def postings():
             search_text = request.args["search"]
         except KeyError:
             search_text = ""
-        es = Elasticsearch('localhost:9200')
+        es = Elasticsearch('elasticsearch:9200')
         index = 'postings'
         if search_text == "":
             body = {
@@ -41,4 +41,4 @@ def postings():
         return jsonify(res), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0')

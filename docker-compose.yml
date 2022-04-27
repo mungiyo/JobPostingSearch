@@ -74,6 +74,12 @@ services:
   sync_scheduler:
     container_name: sync_scheduler
     build: ./scheduler
+  
+  api:
+    container_name: api
+    build: ./api
+    ports:
+        - "5000:5000"
 
 volumes:
   mongo:
