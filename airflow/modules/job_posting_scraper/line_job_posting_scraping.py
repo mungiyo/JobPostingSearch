@@ -34,11 +34,12 @@ def line_job_posting_scraping():
             url=url,
             company=company,
             title=title,
+            career=None,
             contents_css_selector=contents_css_selector
         )
         job_postings.append(posting)
 
-        time.sleep(random.uniform(1, 2))    # 1 ~ 2 seconds sleep
+        time.sleep(random.uniform(0, 1))    # 1 ~ 2 seconds sleep
     
     serialized_data = [posting.get_dict_posting() for posting in job_postings]
 

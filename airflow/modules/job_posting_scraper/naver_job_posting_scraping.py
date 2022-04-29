@@ -16,10 +16,11 @@ def naver_job_posting_scraping():
             url='https://recruit.navercorp.com/naver/job/list/developer/' + str(data['annoId']),
             company='네이버',
             title=data['jobNm'],
+            career=None,
             contents=data['jobText']
         )
         job_postings.append(posting)
-        time.sleep(random.uniform(1, 2))
+        time.sleep(random.uniform(0, 1))
     
     serialized_data = [posting.get_dict_posting() for posting in job_postings]
     

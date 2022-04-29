@@ -7,15 +7,17 @@ class JobPostingRecord:
     url: str
     company: str
     title: str
+    career: str
     js_need: bool
     contents_css_selector: str
     contents: str
     scraped_time: datetime
 
-    def __init__(self, url, company, title, js_need=False, contents_css_selector=None, contents=None):
+    def __init__(self, url, company, title, career, js_need=False, contents_css_selector=None, contents=None):
         self.url = url
         self.company = company
         self.title = title
+        self.career = career
         if contents_css_selector is None:
             soup = bs(contents, 'html.parser')
             self.contents = soup.get_text()
@@ -31,8 +33,8 @@ class JobPostingRecord:
             soup = bs(r.html.html, "lxml")
         else:
             page = requests.get(self.url)
-            soup = bs(page.content.decode('utf-8', 'replace'), 'html.parser')
-            
+            soup = bs(page.content, 'html.parser', from_encoding='utf-8')
+        
         element = soup.select(posting_contents_css_seletor)
         contents = element[0].get_text()
         
@@ -73,6 +75,11 @@ class Config:
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'Referer': 'https://recruit.navercorp.com/naver/job/list/developer'
             },
+        },
+        'nexon': {
+            'url': 'https://career.nexon.com/user/recruit/member/postList?joinCorp=NX&jobGroupCd=22&reSubj=',
+            'posting_css_selector': '#frmMain > fieldset > div.wrapPostGroup > ul > li',
+            'contents_css_selector': '#frmMain > div > div.detailContents'
         }
     }
 
