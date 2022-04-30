@@ -39,6 +39,7 @@ def nexon_job_posting_scraping():
             
             except:
                 flag = False
+                break
             
         currentPage += 1
     
