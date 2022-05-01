@@ -16,7 +16,6 @@
 * [Prerequisites](#prerequisites)
 * [Running project](#running-project)
 * [API service](#api-service)
-* [References](#references)
 
 <!-- ARCHITECTURE DIAGRAM -->
 ## Architecture Diagram
@@ -82,7 +81,3 @@
 ```
 [GET] http://127.0.0.1:5000/postings?search=keyword
 ```
-
-<!-- REFERENCES -->
-## References
-* [UI/UX](https://github.com/startbootstrap/startbootstrap-sb-admin)
