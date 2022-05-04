@@ -8,10 +8,12 @@ from job_posting_load import mongo_load
 # library
 from datetime import timedelta, datetime
 
+now = datetime.now()
+
 with DAG(
     dag_id='kakao_job_posting_ETL',
     description='kakao job postings scraping DAG',
-    start_date=datetime(2022, 4, 12),
+    start_date=datetime(now.year, now.month, now.day),
     schedule_interval=timedelta(hours=12)
 ) as dag:
     # Task1, job posting scraping
