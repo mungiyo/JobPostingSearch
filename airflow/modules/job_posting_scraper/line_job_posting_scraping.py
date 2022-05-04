@@ -34,7 +34,6 @@ def line_job_posting_scraping():
             url=url,
             company=company,
             title=title,
-            career=None,
             contents_css_selector=contents_css_selector
         )
         job_postings.append(posting)

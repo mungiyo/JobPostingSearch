@@ -1,5 +1,4 @@
 import requests
-from requests_html import HTMLSession
 from datetime import datetime
 from bs4 import BeautifulSoup as bs
 
@@ -8,12 +7,11 @@ class JobPostingRecord:
     company: str
     title: str
     career: str
-    js_need: bool
     contents_css_selector: str
     contents: str
     scraped_time: datetime
 
-    def __init__(self, url, company, title, career, js_need=False, contents_css_selector=None, contents=None):
+    def __init__(self, url, company, title, career=None, contents_css_selector=None, contents=None):
         self.url = url
         self.company = company
         self.title = title
@@ -22,19 +20,12 @@ class JobPostingRecord:
             soup = bs(contents, 'html.parser')
             self.contents = soup.get_text()
         else:
-            self.contents = self.set_posting_contents(contents_css_selector, js_need)
+            self.contents = self.set_posting_contents(contents_css_selector)
         self.scraped_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
-    def set_posting_contents(self, posting_contents_css_seletor, js_need):  # job posting contents scraping func.
-        if js_need:
-            session = HTMLSession()
-            r = session.get(self.url)
-            r.html.render()
-            soup = bs(r.html.html, "lxml")
-        else:
-            page = requests.get(self.url)
-            soup = bs(page.content, 'html.parser', from_encoding='utf-8')
-        
+    def set_posting_contents(self, posting_contents_css_seletor):  # job posting contents scraping func.
+        page = requests.get(self.url)
+        soup = bs(page.content, 'html.parser', from_encoding='utf-8')
         element = soup.select(posting_contents_css_seletor)
         contents = element[0].get_text()
         
@@ -45,6 +36,7 @@ class JobPostingRecord:
             'url': self.url,
             'company': self.company,
             'title': self.title,
+            'career': self.career,
             'contents': self.contents,
             'scraped_time': self.scraped_time
         }

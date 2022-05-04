@@ -16,7 +16,6 @@ def naver_job_posting_scraping():
             url='https://recruit.navercorp.com/naver/job/list/developer/' + str(data['annoId']),
             company='네이버',
             title=data['jobNm'],
-            career=None,
             contents=data['jobText']
         )
         job_postings.append(posting)
